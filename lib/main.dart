@@ -48,7 +48,7 @@ class MyHomePage extends StatelessWidget {
                     backgroundImage: AssetImage('assets/museu.jpg'),
                   ),
                   title: Text('Maitê'),
-                  subtitle: Text('email@email.com'),
+                  subtitle: Text('maiterefosco.gr004@academico.ifsul.edu.br'),
                 ),
               ),
 
@@ -146,8 +146,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
 //  const LoginScreen({super.key});
   final emailController = TextEditingController();
-
   final senhaController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -158,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Form (
+          key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -166,6 +168,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   hintText: 'Informe seu e-mail'
                 ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo não pode ser deixado em branco';
+                  }
+                },
               ),
               TextFormField(
                 controller: senhaController,
@@ -173,6 +180,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 decoration: InputDecoration(
                   hintText: 'Informe sua senha'
                 ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo não pode ser deixado em branco';
+                  }
+
+                  if (value.length < 6 || value.length > 12) {
+                    return 'Senha deve conter entre 6 e 12 caracteres';
+                  }
+
+                  if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[!@#$&*])').hasMatch(value)) {
+                    return ' Senha deve ter uma letra maiúscula,\numa letra minúscula e um caractere especial';
+                  }
+                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -180,12 +200,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     child: Text('Logar'),
                     onPressed: () {
-                      SharedDataContainer.of(context)?.updateData(
-                        emailController.text,
-                        senhaController.text,);
-                        
+
+                      if (_formKey.currentState!.validate()) {
+                        SharedDataContainer.of(context)?.updateData(emailController.text, senhaController.text,);
+
                         Navigator.push(context, MaterialPageRoute(builder: (context) => DataScreen()));
-                        //builder: ((context) => DataScreen(email: emailController.text, senha: senhaController.text))));
+                      }
+                       
+                      //builder: ((context) => DataScreen(email: emailController.text, senha: senhaController.text))));
                     },
                   )
                 ],
@@ -273,7 +295,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 decoration: InputDecoration(
                   hintText: 'Informe nova senha'
                 ),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Campo não pode ser deixado em branco';
+                  }
+
+                  if (value.length < 6 || value.length > 12) {
+                    return 'Senha deve conter entre 6 e 12 caracteres';
+                  }
+
+                  if (!RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[!@#$&*])').hasMatch(value)) {
+                    return ' Senha deve ter uma letra maiúscula,\numa letra minúscula e um caractere especial';
+                  }
+                },
               ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Confirmar senha'
+                ),
+                validator: (String? value) {
+                  if (value != novaSenhaController.text) {
+                    return 'Confirmação de senha incompatível';
+                  }
+                },
+              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
