@@ -113,7 +113,6 @@ class _SharedDataContainerState extends State<SharedDataContainer> {
   }
 }
 
-
 class SharedData extends InheritedWidget {
   final String? email;
   final String? senha;
@@ -134,8 +133,6 @@ class SharedData extends InheritedWidget {
     return oldWidget.email != email || oldWidget.senha != senha;
   }
 }
-
-
 
 class LoginScreen extends StatefulWidget {
 
@@ -166,6 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.person
+                  ),
                   hintText: 'Informe seu e-mail'
                 ),
                 validator: (value) {
@@ -178,6 +178,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 controller: senhaController,
                 obscureText: true,
                 decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.password
+                  ),
                   hintText: 'Informe sua senha'
                 ),
                 validator: (value) {
@@ -229,10 +232,10 @@ class DataScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final sharedData = SharedData.of(context);
-    print('email');
-    print(sharedData?.email);
-    print('senha');
-    print(sharedData?.senha);
+  //  print('email');
+  //  print(sharedData?.email);
+  //  print('senha');
+  //  print(sharedData?.senha);
 
     return Scaffold(
       appBar: AppBar(
@@ -241,8 +244,17 @@ class DataScreen extends StatelessWidget {
       body: Container(
         child: Column(
           children: <Widget>[
-            Text(sharedData?.email ?? 'E-mail não disponível'),
-            Text(sharedData?.senha ?? 'Senha não disponível')
+            ListTile(
+              leading: Icon(
+                Icons.person,
+              ),
+              title: Text(sharedData?.email ?? 'E-mail não disponível')
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.vpn_key
+              ),
+              title: Text(sharedData?.senha ?? 'Senha não disponível'))
           ],
         ),
       ),
@@ -278,7 +290,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           child: Column(
             children: <Widget>[
               TextFormField(
+                obscureText: true,
                 decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.password
+                  ),
                   hintText: 'Informe senha atual'
                 ),
                 validator: (String? value) {
@@ -292,7 +308,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
               TextFormField(
                 controller: novaSenhaController,
+                obscureText: true,
                 decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.vpn_key
+                  ),
                   hintText: 'Informe nova senha'
                 ),
                 validator: (value) {
@@ -310,7 +330,11 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 },
               ),
               TextFormField(
+                obscureText: true,
                 decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.vpn_key
+                  ),
                   hintText: 'Confirmar senha'
                 ),
                 validator: (String? value) {
